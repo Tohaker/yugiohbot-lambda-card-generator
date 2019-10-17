@@ -1,0 +1,4 @@
+requests
+selenium
+pytest-cov
+codecov

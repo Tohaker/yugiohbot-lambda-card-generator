@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.7"
+
+env:
+  - PYTHONPATH=yugiohbot
+
+before_install:
+  - pip install -r requirements.txt
+
+install:
+  - pytest --cov=./
+
+after_install:
+  - codecov
