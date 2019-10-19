@@ -5,7 +5,17 @@ python:
 env:
   - PYTHONPATH=yugiohbot
 
+addons:
+  apt:
+    update: true
+
 before_install:
+  - sudo apt-get install -y zip unzip
+  - mkdir bin
+  - curl -SL https://chromedriver.storage.googleapis.com/77.0.3865.40/chromedriver_linux64.zip > chromedriver.zip
+  - unzip chromedriver.zip -d bin/
+  - curl -SL https://github.com/adieuadieu/serverless-chrome/releases/download/v1.0.0-55/stable-headless-chromium-amazonlinux-2017-03.zip > headless-chromium.zip
+  - unzip headless-chromium.zip -d bin/
   - pip install -r requirements.txt
 
 install:

@@ -13,59 +13,57 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
 
-def fillInNeoCardMaker(**kwargs):
+def create_card(**kwargs):
     url = 'https://yemachu.github.io/cardmaker/'
-    url_args = ['name', 'rarity', 'template', 'attribute', 'level', 'picture', 'type', 'effect',
-                'atk', 'defense', 'circulation', 'creator', 'year', 'serial', 'filename']
 
-    driver = setupNeoCardMakerPage(url)
+    driver = setup_web_driver(url)
     cp = '© ' + kwargs.get('year') + ' ' + kwargs.get('creator')
 
-    fillInNeoCardMakerTextBox(driver, 'Name', kwargs.get('name'))
-    selectFromNeoCardMakerDropdown(driver, 'Rarity', kwargs.get('rarity'))
-    selectFromNeoCardMakerDropdown(driver, 'Template', kwargs.get('template'))
-    selectFromNeoCardMakerDropdown(driver, 'Attribute', kwargs.get('attribute'))
-    fillInNeoCardMakerTextBox(driver, 'Level', kwargs.get('level'))
-    uploadPhotoToNeoCardMaker(driver, kwargs.get('picture'))
-    fillInNeoCardMakerTextBox(driver, 'Type', kwargs.get('type'))
-    fillInNeoCardMakerTextArea(driver, 'Effect', kwargs.get('effect'))
-    fillInNeoCardMakerTextBox(driver, 'Attack', kwargs.get('atk'))
-    fillInNeoCardMakerTextBox(driver, 'Defense and/or Link', kwargs.get('defense'))
-    fillInNeoCardMakerTextBox(driver, 'Serial number', kwargs.get('serial'))
-    fillInNeoCardMakerTextBox(driver, 'Copyright', cp)
+    fill_text_box(driver, 'Name', kwargs.get('name'))
+    select_from_drop_down(driver, 'Rarity', kwargs.get('rarity'))
+    select_from_drop_down(driver, 'Template', kwargs.get('template'))
+    select_from_drop_down(driver, 'Attribute', kwargs.get('attribute'))
+    fill_text_box(driver, 'Level', kwargs.get('level'))
+    upload_card_image(driver, kwargs.get('picture'))
+    fill_text_box(driver, 'Type', kwargs.get('type'))
+    fill_text_area(driver, 'Effect', kwargs.get('effect'))
+    fill_text_box(driver, 'Attack', kwargs.get('atk'))
+    fill_text_box(driver, 'Defense and/or Link', kwargs.get('defense'))
+    fill_text_box(driver, 'Serial number', kwargs.get('serial'))
+    fill_text_box(driver, 'Copyright', cp)
 
-    downloadCardImageFromNeoCardMaker(driver, kwargs.get('filename'))
+    download_card_image(driver, kwargs.get('filename'))
     driver.close()
 
 
-def fillInNeoCardMakerTextBox(driver, name, value):
+def fill_text_box(driver, name, value):
     assert "Neo New card maker" in driver.title  # First make sure we're still on the same page.
-    textBox = driver.find_element(By.XPATH, '//label[text()=\"' + name + '\"]/input[1]')
-    textBox.clear()
-    textBox.send_keys(value)
+    text_box = driver.find_element(By.XPATH, '//label[text()=\"' + name + '\"]/input[1]')
+    text_box.clear()
+    text_box.send_keys(value)
 
 
-def fillInNeoCardMakerTextArea(driver, name, value):
+def fill_text_area(driver, name, value):
     assert "Neo New card maker" in driver.title  # First make sure we're still on the same page.
-    textArea = driver.find_element(By.XPATH, '//label[text()=\"' + name + '\"]/textarea[1]')
-    textArea.clear()
-    textArea.send_keys(value)
+    text_area = driver.find_element(By.XPATH, '//label[text()=\"' + name + '\"]/textarea[1]')
+    text_area.clear()
+    text_area.send_keys(value)
 
 
-def selectFromNeoCardMakerDropdown(driver, name, value):
+def select_from_drop_down(driver, name, value):
     assert "Neo New card maker" in driver.title  # First make sure we're still on the same page.
-    dropdown = Select(driver.find_element(By.XPATH, '//label[text()=\"' + name + '\"]/select[1]'))
-    dropdown.select_by_value(value)
+    drop_down = Select(driver.find_element(By.XPATH, '//label[text()=\"' + name + '\"]/select[1]'))
+    drop_down.select_by_value(value)
 
 
-def uploadPhotoToNeoCardMaker(driver, filepath):
+def upload_card_image(driver, filepath):
     assert "Neo New card maker" in driver.title  # First make sure we're still on the same page.
     driver.find_element(By.XPATH, '//label[text()="Image"]/input[2]').send_keys(filepath)
     driver.implicitly_wait(2)
 
 
-def setupNeoCardMakerPage(url):
-    driver = startWebdriver()
+def setup_web_driver(url):
+    driver = get_web_driver()
     driver.get(url)
     assert "Neo New card maker" in driver.title
     driver.implicitly_wait(1)
@@ -73,7 +71,8 @@ def setupNeoCardMakerPage(url):
     button.click()
     return driver
 
-def startWebdriver():
+
+def get_web_driver():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
@@ -82,7 +81,7 @@ def startWebdriver():
     return webdriver.Chrome(chrome_options=chrome_options)
 
 
-def downloadCardImageFromNeoCardMaker(driver, filename):
+def download_card_image(driver, filename):
     assert "Neo New card maker" in driver.title  # First make sure we're still on the same page.
     canvas = driver.find_element(By.XPATH, '//canvas[1]')
     canvas_base64 = driver.execute_script("return arguments[0].toDataURL('image/png').substring(21);", canvas)
@@ -91,12 +90,9 @@ def downloadCardImageFromNeoCardMaker(driver, filename):
         f.write(canvas_png)
 
 
-
-
-
 if __name__ == '__main__':
-    driver = setupNeoCardMakerPage('https://yemachu.github.io/cardmaker/')
+    testdriver = get_web_driver('https://yemachu.github.io/cardmaker/')
     file = os.path.abspath("data/cropped/11.jpg")
-    uploadPhotoToNeoCardMaker(driver, file)
-    downloadCardImageFromNeoCardMaker(driver, 'ygo.png')
-    driver.close()
+    upload_card_image(testdriver, file)
+    download_card_image(testdriver, 'ygo.png')
+    testdriver.close()

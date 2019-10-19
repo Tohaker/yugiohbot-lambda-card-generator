@@ -1,8 +1,16 @@
 import shutil
 import urllib.parse
+import logging
 
 import requests
 
+
+# We can generate a card image using the following API:
+# https://www.yugiohcardmaker.net/ycmaker/createcard.php?name=&cardtype=Monster&subtype=normal&attribute=Light&level=1
+# &rarity=Common&picture=&circulation=&set1=&set2=&type=&carddescription=&atk=&def=&creator=&year=2019&serial=
+
+# https://www.yugiohcardmaker.net/ycmaker/createcard.php?name=&cardtype=Spell&trapmagictype=Quick-Play&rarity=Common
+# &picture=&circulation=&set1=&set2=&carddescription=&creator=&year=2019&serial=
 
 def construct_request(**kwargs):
     base_url = "https://www.yugiohcardmaker.net/ycmaker/createcard.php?"
@@ -20,8 +28,11 @@ def construct_request(**kwargs):
 
 
 def download_image(url, path):
-    r = requests.get(url, stream=True)
-    if r.status_code == 200:
-        with open(path, 'wb') as f:
-            r.raw.decode_content = True
-            shutil.copyfileobj(r.raw, f)
+    try:
+        r = requests.get(url, stream=True)
+        if r.status_code == 200:
+            with open(path, 'wb') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+    except Exception as e:
+        logging.debug('Error downloading image: ' + str(e))

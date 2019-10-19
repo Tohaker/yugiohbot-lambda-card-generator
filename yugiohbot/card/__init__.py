@@ -1,1 +1,2 @@
-from . import card
+from . import neocardmaker
+from . import ycmaker
