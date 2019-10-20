@@ -8,7 +8,7 @@ resource "aws_lambda_function" "card_generator" {
   role              = aws_iam_role.lambda_card_generator.arn
   
   runtime           = var.runtime
-  timeout           = 60
+  timeout           = 360
 
   memory_size       = 512
 
