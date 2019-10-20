@@ -6,6 +6,8 @@ import random
 from card import neocardmaker as neo
 from utils import *
 
+logging.basicConfig(level=logging.DEBUG)
+
 
 def lambda_handler(event, context):
     title = event['title']
@@ -48,6 +50,8 @@ def lambda_handler(event, context):
                     level=str(random.randint(0, 12)), picture=card_image_path, type=card_type,
                     effect=effect, atk=attack, defense=defense, creator='YuGiOh-Bot', year='2019',
                     serial=card_serial, filename=final_image_path)
+
+    s3utils.upload_generated_card_to_s3(final_image_path)
 
     result = {'card_file': final_image_path}
     logging.debug(result)

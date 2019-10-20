@@ -36,3 +36,4 @@ install:
 
 script:
   - ./integration.sh
+  - ./deployment/deploy.sh

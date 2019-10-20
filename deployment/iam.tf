@@ -58,6 +58,25 @@ resource "aws_iam_policy" "invoke_lambda" {
 EOF
 }
 
+resource "aws_iam_policy" "save_generated_images" {
+  name        = "SaveGeneratedCardsToS3"
+  description = "Allows the Lambda to upload a file to an S3 Bucket"
+  policy      = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+          "s3:Put*"
+      ],
+      "Resource": "arn:aws:s3:::yu-gi-oh-images/generated/*"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_policy_attachment" "attach_logging" {
   name       = "lambda-attachment"
   roles      = [
@@ -71,5 +90,13 @@ resource "aws_iam_policy_attachment" "attach_lambda" {
   roles      = [
     aws_iam_role.lambda_card_generator.name
   ]
-  policy_arn =  aws_iam_policy.invoke_lambda.arn
+  policy_arn = aws_iam_policy.invoke_lambda.arn
+}
+
+resource "aws_iam_policy_attachment" "attach_s3" {
+  name       = "lambda-attachment"
+  roles      = [
+    aws_iam_role.lambda_card_generator.name
+  ]
+  policy_arn = aws_iam_policy.save_generated_images.arn
 }
