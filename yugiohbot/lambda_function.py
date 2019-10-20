@@ -8,8 +8,6 @@ from utils import *
 
 
 def lambda_handler(event, context):
-    logging.debug('Received event: ' + event)
-
     title = event['title']
     effect = event['text']
     logging.debug('Received title: ' + title)
