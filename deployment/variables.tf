@@ -31,3 +31,13 @@ variable "runtime" {
   description = "The runtime language to be used."
   default = "python3.7"
 }
+
+variable "chromedriver" {
+  description = "The location of the bundled chromedriver."
+  default = "/var/task/bin/chromedriver"
+}
+
+variable "headless-chromium" {
+  description = "The location of the bundled chromium installation"
+  default = "/var/task/bin/headless-chromium"
+}

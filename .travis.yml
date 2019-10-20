@@ -5,21 +5,34 @@ python:
 env:
   - PYTHONPATH=yugiohbot
 
+services:
+  - docker
+
 addons:
   apt:
     update: true
 
 before_install:
-  - sudo apt-get install -y zip unzip chromium-browser
+  - sudo apt-get install -y zip unzip
   - mkdir -p ~/bin
-  - curl -SL https://chromedriver.storage.googleapis.com/77.0.3865.40/chromedriver_linux64.zip > chromedriver.zip
+  - curl -SL https://chromedriver.storage.googleapis.com/2.44/chromedriver_linux64.zip > chromedriver.zip
   - unzip chromedriver.zip -d ~/bin/
+  - curl -SL https://github.com/adieuadieu/serverless-chrome/releases/download/v1.0.0-55/stable-headless-chromium-amazonlinux-2017-03.zip > headless-chromium.zip
+  - unzip headless-chromium.zip -d ~/bin/
+  - chmod +x ~/bin/headless-chromium
   - chmod +x ~/bin/chromedriver
-  - cp /usr/bin/chromium-browser ~/bin/
   - pip install -r requirements.txt
 
 install:
-  - pytest --cov=./
+  - mkdir package
+  - pip install -r requirements.txt -t package/
+  - cp ~/bin/chromedriver package/bin/
+  - cp ~/bin/headless-chromium package/bin/
+  - cp -a yugiohbot/. package/
+  - zip -r package package/.
+  - chmod +x ./integration.sh
+  - chmod +x ./deployment/deploy.sh
+  - docker pull lambci/lambda:python3.7
 
-after_install:
-  - codecov
+script:
+  - ./integration.sh

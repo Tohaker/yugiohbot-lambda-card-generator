@@ -11,6 +11,13 @@ resource "aws_lambda_function" "card_generator" {
   timeout           = 60
 
   memory_size       = 512
+
+  environment {
+    variables = {
+      CHROMIUM = var.headless-chromium
+      CHROMEDRIVER = var.chromedriver
+    }
+  }
 }
 
 resource "aws_cloudwatch_log_group" "card_generator" {

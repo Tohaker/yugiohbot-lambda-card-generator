@@ -31,12 +31,12 @@ def create_card(**kwargs):
 
 
 def setup_web_driver(url):
-    driver = get_web_driver()
+    driver = get_chrome_web_driver()
     driver.get(url)
     return driver
 
 
-def get_web_driver():
+def get_chrome_web_driver():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
@@ -56,6 +56,7 @@ def fill_text_box(driver, name, value):
     assert "Neo New card maker" in driver.title  # First make sure we're still on the same page.
     text_box = driver.find_element(By.XPATH, '//label[text()=\"' + name + '\"]/input[1]')
     text_box.clear()
+    driver.implicitly_wait(1)
     text_box.send_keys(value)
 
 
@@ -63,6 +64,7 @@ def fill_text_area(driver, name, value):
     assert "Neo New card maker" in driver.title  # First make sure we're still on the same page.
     text_area = driver.find_element(By.XPATH, '//label[text()=\"' + name + '\"]/textarea[1]')
     text_area.clear()
+    driver.implicitly_wait(1)
     text_area.send_keys(value)
 
 
@@ -88,7 +90,7 @@ def download_card_image(driver, filename):
 
 
 if __name__ == '__main__':
-    testdriver = get_web_driver('https://yemachu.github.io/cardmaker/')
+    testdriver = get_chrome_web_driver('https://yemachu.github.io/cardmaker/')
     file = os.path.abspath("data/cropped/11.jpg")
     upload_card_image(testdriver, file)
     download_card_image(testdriver, 'ygo.png')

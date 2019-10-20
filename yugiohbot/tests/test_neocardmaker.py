@@ -11,7 +11,7 @@ from card import neocardmaker
 class TestNeoCardMaker(unittest.TestCase):
     def setUp(self):
         if sys.platform == 'linux':
-            os.environ['CHROMIUM'] = '/home/travis/bin/chromium-browser'
+            os.environ['CHROMIUM'] = '/home/travis/bin/headless-chromium'
             os.environ['CHROMEDRIVER'] = '/home/travis/bin/chromedriver'
         else:
             os.environ['CHROMIUM'] = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
@@ -22,7 +22,7 @@ class TestNeoCardMaker(unittest.TestCase):
         self.test_driver.implicitly_wait(1)
 
     def test_get_web_driver(self):
-        driver = neocardmaker.get_web_driver()
+        driver = neocardmaker.get_chrome_web_driver()
         self.assertEqual(driver.name, 'chrome')
 
     def test_setup_web_driver(self):
