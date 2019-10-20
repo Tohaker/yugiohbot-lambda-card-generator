@@ -14,9 +14,10 @@ def lambda_handler(event, context):
     logging.debug('Received text: ' + effect)
 
     card_image = str(random.choice(csvutils.get_card_ids('resources/cards_api.csv'))) + '.jpg'
+    logging.debug('Chosen image: ' + card_image)
     s3utils.download_cropped_image_from_s3(card_image)
     card_image_path = os.path.abspath(card_image)
-    logging.debug('Chosen image: ' + card_image + '. Full path: ' + card_image_path)
+    logging.debug('Full path: ' + card_image_path)
 
     rarity = ['common', 'rare', 'ultra', 'secret']
     template = ['Normal', 'Effect', 'Ritual', 'Fusion', 'Synchro', 'DarkSynchro', 'Xyz', 'Unity', 'Link',
@@ -54,4 +55,5 @@ def lambda_handler(event, context):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     print(lambda_handler({'title': 'test-title', 'text': 'test-text'}, None))
