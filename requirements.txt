@@ -1,5 +1,5 @@
 requests
-selenium
+selenium==2.53.6
 chromedriver-install
 boto3
 botocore

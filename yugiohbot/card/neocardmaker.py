@@ -43,7 +43,7 @@ def get_chrome_web_driver():
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.binary_location = os.getenv('CHROMIUM')
     chromedriver = os.getenv('CHROMEDRIVER')
-    return webdriver.Chrome(executable_path=chromedriver, options=chrome_options)
+    return webdriver.Chrome(executable_path=chromedriver, chrome_options=chrome_options)
 
 
 def start_new_card(driver):
@@ -91,7 +91,7 @@ def download_card_image(driver, filename):
 
 
 if __name__ == '__main__':
-    testdriver = get_chrome_web_driver('https://yemachu.github.io/cardmaker/')
+    testdriver = setup_web_driver('https://yemachu.github.io/cardmaker/')
     file = os.path.abspath("data/cropped/11.jpg")
     upload_card_image(testdriver, file)
     download_card_image(testdriver, 'ygo.png')
