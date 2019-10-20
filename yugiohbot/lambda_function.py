@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     card_image = str(random.choice(csvutils.get_card_ids('resources/cards_api.csv'))) + '.jpg'
     logging.debug('Chosen image: ' + card_image)
     s3utils.download_cropped_image_from_s3(card_image)
-    card_image_path = os.path.abspath(card_image)
+    card_image_path = os.path.abspath('/tmp/' + card_image)
     logging.debug('Full path: ' + card_image_path)
 
     rarity = ['common', 'rare', 'ultra', 'secret']

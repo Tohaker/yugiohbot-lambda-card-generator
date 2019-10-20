@@ -11,5 +11,5 @@ def upload_generated_card_to_s3(file):
 
 
 def download_cropped_image_from_s3(file):
-    success = s3.download_file('yu-gi-oh-images', 'cropped/' + file, file)
+    success = s3.download_file('yu-gi-oh-images', 'cropped/' + file, '/tmp/' + file)
     logging.debug("Download " + file + "from S3: " + str(success))
