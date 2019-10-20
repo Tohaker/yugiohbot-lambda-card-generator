@@ -40,9 +40,6 @@ install:
   - chmod +x ./deployment/deploy.sh
   - docker pull lambci/lambda:python3.7
 
-script:
-  - ./integration.sh
-
 after_success:
   - codecov
   - cd package
