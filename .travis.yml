@@ -29,7 +29,7 @@ before_install:
   - pip install awscli
   - aws --version
 
-install:
+script:
   - pytest --cov=./
   - mkdir package
   - pip install -r requirements.txt -t package/
@@ -38,9 +38,8 @@ install:
   - cp -a yugiohbot/. package/
   - chmod +x ./integration.sh
   - chmod +x ./deployment/deploy.sh
-  - docker pull lambci/lambda:python3.7
 
-after_success:
+after_script:
   - codecov
   - cd package
   - zip -r ../package.zip *
