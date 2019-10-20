@@ -17,7 +17,7 @@ before_install:
   - mkdir -p ~/bin
   - curl -SL https://chromedriver.storage.googleapis.com/77.0.3865.40/chromedriver_linux64.zip > chromedriver.zip
   - unzip chromedriver.zip -d ~/bin/
-  - cp /usr/bin/chromium-browser ~/bin
+  - cp -r /usr/bin/chromium-browser ~/bin
   - chmod +x ~/bin/chromedriver
   - chmod +x ~/bin/chromium-browser
   - wget https://releases.hashicorp.com/terraform/${TERRAFORM}/terraform_${TERRAFORM}_linux_amd64.zip
