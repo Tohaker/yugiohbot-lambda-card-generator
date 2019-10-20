@@ -36,14 +36,15 @@ install:
   - cp ~/bin/chromedriver package/bin/
   - cp ~/bin/headless-chromium package/bin/
   - cp -a yugiohbot/. package/
-  - zip -r package package/.
   - chmod +x ./integration.sh
   - chmod +x ./deployment/deploy.sh
   - docker pull lambci/lambda:python3.7
 
 script:
   - ./integration.sh
-  - ./deployment/deploy.sh
 
 after_success:
   - codecov
+  - cd package
+  - zip -r ../package.zip *
+  - ../deployment/deploy.sh
