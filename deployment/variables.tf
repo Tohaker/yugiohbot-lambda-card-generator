@@ -39,5 +39,5 @@ variable "chromedriver" {
 
 variable "headless-chromium" {
   description = "The location of the bundled chromium installation"
-  default = "/var/task/bin/headless-chromium"
+  default = "/var/task/bin/chromium-browser"
 }
