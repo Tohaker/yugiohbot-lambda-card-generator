@@ -21,9 +21,16 @@ before_install:
   - unzip headless-chromium.zip -d ~/bin/
   - chmod +x ~/bin/headless-chromium
   - chmod +x ~/bin/chromedriver
+  - wget https://releases.hashicorp.com/terraform/${TERRAFORM}/terraform_${TERRAFORM}_linux_amd64.zip
+  - unzip terraform_${TERRAFORM}_linux_amd64.zip
+  - sudo mv terraform /usr/local/bin/
+  - terraform --version
   - pip install -r requirements.txt
+  - pip install awscli
+  - aws --version
 
 install:
+  - pytest --cov=./
   - mkdir package
   - pip install -r requirements.txt -t package/
   - cp ~/bin/chromedriver package/bin/
@@ -37,3 +44,6 @@ install:
 script:
   - ./integration.sh
   - ./deployment/deploy.sh
+
+after_success:
+  - codecov
