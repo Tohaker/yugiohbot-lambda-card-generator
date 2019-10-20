@@ -41,14 +41,14 @@ class TestNeoCardMaker(unittest.TestCase):
             neocardmaker.fill_text_box(self.test_driver, name, expected)
             text_box = self.test_driver.find_element(By.XPATH, '//label[text()=\"' + name + '\"]/input[1]')
             actual = text_box.get_attribute('value')
-            self.assertEqual(expected, actual)
+            self.assertTrue(expected in actual)
 
     def test_fill_text_area(self):
         expected = 'this is\na multiline\nentry'
         neocardmaker.fill_text_area(self.test_driver, 'Effect', expected)
         text_area = self.test_driver.find_element(By.XPATH, '//label[text()=\"Effect\"]/textarea[1]')
         actual = text_area.get_attribute('value')
-        self.assertEqual(expected, actual)
+        self.assertEqual(expected in actual)
 
     def test_select_from_drop_down(self):
         rarity_options = ['common', 'rare', 'ultra', 'secret']
