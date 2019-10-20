@@ -1,10 +1,3 @@
-# We can generate a card image using the following API:
-# https://www.yugiohcardmaker.net/ycmaker/createcard.php?name=&cardtype=Monster&subtype=normal&attribute=Light&level=1
-# &rarity=Common&picture=&circulation=&set1=&set2=&type=&carddescription=&atk=&def=&creator=&year=2019&serial=
-
-# https://www.yugiohcardmaker.net/ycmaker/createcard.php?name=&cardtype=Spell&trapmagictype=Quick-Play&rarity=Common
-# &picture=&circulation=&set1=&set2=&carddescription=&creator=&year=2019&serial=
-
 import base64
 import os
 
@@ -19,6 +12,7 @@ def create_card(**kwargs):
     driver = setup_web_driver(url)
     cp = '© ' + kwargs.get('year') + ' ' + kwargs.get('creator')
 
+    start_new_card(driver)
     fill_text_box(driver, 'Name', kwargs.get('name'))
     select_from_drop_down(driver, 'Rarity', kwargs.get('rarity'))
     select_from_drop_down(driver, 'Template', kwargs.get('template'))
@@ -34,6 +28,28 @@ def create_card(**kwargs):
 
     download_card_image(driver, kwargs.get('filename'))
     driver.close()
+
+
+def setup_web_driver(url):
+    driver = get_web_driver()
+    driver.get(url)
+    return driver
+
+
+def get_web_driver():
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.binary_location = os.getenv('CHROMIUM')
+    chromedriver = os.getenv('CHROMEDRIVER')
+    return webdriver.Chrome(executable_path=chromedriver, options=chrome_options)
+
+
+def start_new_card(driver):
+    assert "Neo New card maker" in driver.title
+    driver.implicitly_wait(1)
+    button = driver.find_element(By.XPATH, '//button[text()="New"]')
+    button.click()
 
 
 def fill_text_box(driver, name, value):
@@ -60,25 +76,6 @@ def upload_card_image(driver, filepath):
     assert "Neo New card maker" in driver.title  # First make sure we're still on the same page.
     driver.find_element(By.XPATH, '//label[text()="Image"]/input[2]').send_keys(filepath)
     driver.implicitly_wait(2)
-
-
-def setup_web_driver(url):
-    driver = get_web_driver()
-    driver.get(url)
-    assert "Neo New card maker" in driver.title
-    driver.implicitly_wait(1)
-    button = driver.find_element(By.XPATH, '//button[text()="New"]')
-    button.click()
-    return driver
-
-
-def get_web_driver():
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--no-sandbox')
-    # chrome_options.add_argument('--')
-    # chrome_options.binary_location = os.getcwd() + "/bin/headless-chromium"
-    return webdriver.Chrome(chrome_options=chrome_options)
 
 
 def download_card_image(driver, filename):

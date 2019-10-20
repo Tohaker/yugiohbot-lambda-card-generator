@@ -1,4 +1,6 @@
 requests
 selenium
+boto3
+botocore
 pytest-cov
 codecov
