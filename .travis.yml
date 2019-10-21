@@ -27,12 +27,11 @@ before_install:
   - gcloud version
   - gcloud components install beta
   - gcloud components update
-  - gcloud auth configure-docker
   - wget https://releases.hashicorp.com/terraform/${TERRAFORM}/terraform_${TERRAFORM}_linux_amd64.zip
   - unzip terraform_${TERRAFORM}_linux_amd64.zip
   - sudo mv terraform /usr/local/bin/
   - terraform --version
 
 script:
-  - docker build -t gcr.io/yugiohbot/card-generator .
-  - docker push gcr.io/yugiohbot/card-generator
+  - chmod +x deployment/deploy.sh
+  - ./deployment/deploy.sh
