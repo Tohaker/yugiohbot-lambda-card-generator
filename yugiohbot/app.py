@@ -3,15 +3,22 @@ import logging
 import os
 import random
 
+from flask import Flask
+from flask import request
+
 from card import neocardmaker as neo
 from utils import *
 
 logging.basicConfig(level=logging.DEBUG)
+app = Flask(__name__)
 
 
-def lambda_handler(event, context):
-    title = event['title']
-    effect = event['text']
+@app.route('/')
+def handler():
+    logging.debug(request.args)
+
+    title = request.args.get('title')
+    effect = request.args.get('text')
     logging.debug('Received title: ' + title)
     logging.debug('Received text: ' + effect)
 
@@ -59,5 +66,4 @@ def lambda_handler(event, context):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    print(lambda_handler({'title': 'test-title', 'text': 'test-text'}, None))
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))

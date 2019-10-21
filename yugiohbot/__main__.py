@@ -1,4 +1,4 @@
-from yugiohbot import lambda_function
+from yugiohbot import app
 
 if __name__ == '__main__':
-    lambda_function.lambda_handler(None, None)
+    app.handler(None, None)

@@ -14,14 +14,20 @@ pushd ${current_directory}
 
 set -e
 
-echo "Uploading package file to S3"
-aws s3 cp ../package.zip s3://021651181835-lambda-packages/yugiohbot-card-generator-package.zip
+echo "Building docker image"
+docker build -t gcr.io/yugiohbot/card-generator ../
+
+echo "Authorising gcloud"
+echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ${HOME}/gcloud-service-key.json
+gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+gcloud --quiet config set project yugiohbot
+gcloud --quiet config set compute/zone us-east1
+
+echo "Pushing docker image"
+gcloud docker push gcr.io/yugiohbot/card-generator
 
 echo "Initialising Terraform."
-terraform init \
-    -backend=true \
-    -backend-config="access_key=${AWS_ACCESS_KEY_ID}" \
-    -backend-config="secret_key=${AWS_SECRET_ACCESS_KEY}"
+terraform init
 
 echo "Planning Terraform."
 terraform plan \

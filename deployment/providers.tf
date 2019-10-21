@@ -1,14 +1,13 @@
-provider "aws" {
-  profile = "terraform-deployer"
-  region  = "eu-west-2"
+provider "google" {
+  credentials = "${file("~/gcloud-service-key.json")}"
+  project = "yugiohbot"
+  region  = "us-east1"
 }
 
-terraform {
-  backend "s3" {
-    bucket  = "021651181835-terraform-state"
-    key     = "lambda_card_generator.tfstate"
-    region  = "eu-west-2"
-  }
+provider "google-beta" {
+  credentials = "${file("~/gcloud-service-key.json")}"
+  project = "yugiohbot"
+  region  = "us-east1"
 }
 
-data "aws_caller_identity" "current" {}
+terraform {}
